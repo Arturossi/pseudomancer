@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pseudomancer"
+
+[tool.black]
+include = '\.pyi?$'
+line-length = 80
