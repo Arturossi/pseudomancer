@@ -67,6 +67,5 @@ def get_options():
 def main():
     args = get_options(sys.argv[1:])
 
-
 if __name__ == "__main__":
-    cli()
+    main()
