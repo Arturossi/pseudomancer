@@ -5,13 +5,19 @@ import re
 import sys
 
 with open(
-    os.path.join(this_directory, "requirements.txt"), encoding="utf-8"
+    os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "requirements.txt"
+    ),
+    encoding="utf-8",
 ) as f:
     requirements = f.read().splitlines()
 
 
 def readme():
-    with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
+    with open(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "README.md"),
+        encoding="utf-8",
+    ) as f:
         return f.read()
 
 
