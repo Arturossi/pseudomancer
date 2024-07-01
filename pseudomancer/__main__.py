@@ -11,8 +11,8 @@ class UltimateHelpFormatter(
 
 
 def get_args():
-    description = "pseudomancer: s command line tool for reconstructing "+
-    " pseudogenes in prokaryotic genomes
+    description = ("pseudomancer: a command line tool for reconstructing" + 
+                   " pseudogenes in prokaryotic genomes")
     main_parser = argparse.ArgumentParser(
         description = description,
         prog = "pseudomancer",
@@ -25,8 +25,8 @@ def get_args():
         "-g",
         "--genome",
         dest="genome_file",
-        help="FASTA-format file containing genome of interest which will be "+
-        " queried for potential pseudogenes",
+        help=("FASTA-format file containing genome of interest which will be "+
+        " queried for potential pseudogenes"),
         type=str,
         required=True,
         default=None,
@@ -35,8 +35,8 @@ def get_args():
         "-p",
         "--proteins",
         dest="proteins_file",
-        help="FASTA-format file containing containing protein sequences to be"+
-        " used as queries for homolog searches against the genome of interest",
+        help=("FASTA-format file containing containing protein sequences to be"+
+        " used as queries for homolog searches against the genome of interest"),
         type=str,
         required=True,
         default=None,
