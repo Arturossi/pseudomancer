@@ -1,6 +1,6 @@
 import argparse
 from .__init__ import __version__
-from .tblastn import check_tblastn_version
+from .tblastn import check_blast_version
 from .tblastn import run_tblastn
 import os
 import sys
