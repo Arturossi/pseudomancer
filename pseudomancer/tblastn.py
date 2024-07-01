@@ -1,4 +1,5 @@
 import subprocess
+import sys
 
 
 def check_blast_version(blast_path: str = "tblastn"):
