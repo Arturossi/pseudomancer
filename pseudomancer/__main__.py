@@ -10,7 +10,7 @@ class UltimateHelpFormatter(
     pass
 
 
-def get_options():
+def get_args():
     description = "pseudomancer: s command line tool for reconstructing "+
     " pseudogenes in prokaryotic genomes
     main_parser = argparse.ArgumentParser(
@@ -25,47 +25,61 @@ def get_options():
         "-g",
         "--genome",
         dest="genome_file",
+        help="FASTA-format file containing genome of interest which will be "+
+        " queried for potential pseudogenes",
+        type=str,
         required=True,
-        help=("input genome file containing putative pseudogenes"),
-        type=str)
+        default=None,
+    )
     io_opts.add_argument(
         "-p",
         "--proteins",
         dest="proteins_file",
+        help="FASTA-format file containing containing protein sequences to be"+
+        " used as queries for homolog searches against the genome of interest",
+        type=str,
         required=True,
-        help=("fasta file containing containing protein sequences"),
-        type=str)
+        default=None,
+    )
     io_opts.add_argument(
         "-o",
         "--out_dir",
         dest="output_dir",
-        required=True,
         help="directory for output files",
-        type=str
+        type=str,
+        required=True,
+        default=None,
     )
 
     # tblastn args
-    tb_opts = parser.add_argument_group('tblastn arguments')
-    tb_opts.add_argument(
+    blast_opts = parser.add_argument_group('tblastn arguments')
+    blast_opts.add_argument(
         "-e,
         "--evalue",
         dest="e_value",
+        help="e-value threshold for identifying homologs using tblastn",
+        type=float,
         required=True,
-        help=("e-value threshold for identifying homologs using tblastn"),
-        type=str)
+        default=1e-5
+    )
 
     # main parser args
     main_parser.add_argument(
         "-v", "--version", action="version", version="%(prog)s " + __version__
     )
-    # parse arguments and run function
-    args = main_parser.parse_args()
-    args.func(args)
 
-    return
+    args = main_parser.parse_args()
+    parser.set_defaults(func = run_tblastn)
+
+    return args
 
 def main():
-    args = get_options(sys.argv[1:])
+    args = get_args(sys.argv[1:])
+
+    check_blast_version()
+
+    if not os.path.exists(args.output_dir):
+        os.mkdir(args.output_dir)
 
 if __name__ == "__main__":
     main()
