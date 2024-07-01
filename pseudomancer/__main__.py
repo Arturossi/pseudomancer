@@ -2,6 +2,8 @@ import argparse
 from .__init__ import __version__
 from .tblastn import check_tblastn_version
 from .tblastn import run_tblastn
+import os
+import sys
 
 
 class UltimateHelpFormatter(
@@ -22,7 +24,7 @@ def get_args():
     )
 
     # i/o args
-    io_opts = parser.add_argument_group("Input and output")
+    io_opts = main_parser.add_argument_group("Input and output")
     io_opts.add_argument(
         "-g",
         "--genome",
@@ -58,7 +60,7 @@ def get_args():
     )
 
     # tblastn args
-    blast_opts = parser.add_argument_group("tblastn arguments")
+    blast_opts = main_parser.add_argument_group("tblastn arguments")
     blast_opts.add_argument(
         "-e",
         "--evalue",
@@ -75,7 +77,7 @@ def get_args():
     )
 
     args = main_parser.parse_args()
-    parser.set_defaults(func=run_tblastn)
+    main_parser.set_defaults(func=run_tblastn)
 
     return args
 
