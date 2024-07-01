@@ -11,22 +11,26 @@ class UltimateHelpFormatter(
 
 
 def get_args():
-    description = ("pseudomancer: a command line tool for reconstructing" + 
-                   " pseudogenes in prokaryotic genomes")
+    description = (
+        "pseudomancer: a command line tool for reconstructing"
+        + " pseudogenes in prokaryotic genomes"
+    )
     main_parser = argparse.ArgumentParser(
-        description = description,
-        prog = "pseudomancer",
-        formatter_class=UltimateHelpFormatter
+        description=description,
+        prog="pseudomancer",
+        formatter_class=UltimateHelpFormatter,
     )
 
     # i/o args
-    io_opts = parser.add_argument_group('Input and output')
+    io_opts = parser.add_argument_group("Input and output")
     io_opts.add_argument(
         "-g",
         "--genome",
         dest="genome_file",
-        help=("FASTA-format file containing genome of interest which will be "+
-        " queried for potential pseudogenes"),
+        help=(
+            "FASTA-format file containing genome of interest which will be "
+            + " queried for potential pseudogenes"
+        ),
         type=str,
         required=True,
         default=None,
@@ -35,8 +39,10 @@ def get_args():
         "-p",
         "--proteins",
         dest="proteins_file",
-        help=("FASTA-format file containing containing protein sequences to be"+
-        " used as queries for homolog searches against the genome of interest"),
+        help=(
+            "FASTA-format file containing containing protein sequences to be"
+            + " used as queries for homolog searches against the genome of interest"
+        ),
         type=str,
         required=True,
         default=None,
@@ -52,15 +58,15 @@ def get_args():
     )
 
     # tblastn args
-    blast_opts = parser.add_argument_group('tblastn arguments')
+    blast_opts = parser.add_argument_group("tblastn arguments")
     blast_opts.add_argument(
-        "-e,
+        "-e",
         "--evalue",
         dest="e_value",
         help="e-value threshold for identifying homologs using tblastn",
         type=float,
         required=True,
-        default=1e-5
+        default=1e-5,
     )
 
     # main parser args
@@ -69,9 +75,10 @@ def get_args():
     )
 
     args = main_parser.parse_args()
-    parser.set_defaults(func = run_tblastn)
+    parser.set_defaults(func=run_tblastn)
 
     return args
+
 
 def main():
     args = get_args(sys.argv[1:])
@@ -80,6 +87,7 @@ def main():
 
     if not os.path.exists(args.output_dir):
         os.mkdir(args.output_dir)
+
 
 if __name__ == "__main__":
     main()
