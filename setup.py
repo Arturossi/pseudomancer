@@ -2,6 +2,7 @@ from setuptools import find_packages, setup
 import io
 import os
 import re
+import sys
 
 with open(
     os.path.join(this_directory, "requirements.txt"), encoding="utf-8"
