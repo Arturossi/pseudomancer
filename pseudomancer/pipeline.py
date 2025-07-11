@@ -22,7 +22,9 @@ def check_dependencies():
     if missing:
         sys.stderr.write(
             f"Missing required dependencies: {', '.join(missing)}\n"
-            "Please install mmseqs2 and NCBI datasets command-line tools.\n"
+            "Please install the following tools:\n"
+            "- mmseqs2: https://github.com/soedinglab/MMseqs2\n"
+            "- datasets: https://www.ncbi.nlm.nih.gov/datasets/docs/v2/command-line-tools/download-and-install/\n"
         )
         sys.exit(1)
 
