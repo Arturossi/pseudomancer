@@ -1,26 +1,19 @@
 import argparse
 from .__init__ import __version__
-from .tblastn import check_blast_version
-from .tblastn import run_tblastn
+from .pipeline import check_dependencies
+from .pipeline import run_pseudomancer_pipeline
 import os
 import sys
-
-
-class UltimateHelpFormatter(
-    argparse.RawTextHelpFormatter, argparse.ArgumentDefaultsHelpFormatter
-):
-    pass
 
 
 def get_args():
     description = (
         "pseudomancer: a command line tool for reconstructing"
-        + " pseudogenes in prokaryotic genomes"
+        + " pseudogenes in prokaryotic genomes using mmseqs2"
     )
     main_parser = argparse.ArgumentParser(
         description=description,
         prog="pseudomancer",
-        formatter_class=UltimateHelpFormatter,
     )
 
     # i/o args
@@ -38,12 +31,12 @@ def get_args():
         default=None,
     )
     io_opts.add_argument(
-        "-p",
-        "--proteins",
-        dest="proteins_file",
+        "--genus",
+        dest="genus",
         help=(
-            "FASTA-format file containing containing protein sequences to be"
-            + " used as queries for homolog searches against the genome of interest"
+            "Genus name for downloading reference protein sequences from NCBI RefSeq "
+            + "(e.g., 'Mycobacterium'). Proteins will be downloaded, clustered at 99%% identity, "
+            + "and used as queries for homolog searches."
         ),
         type=str,
         required=True,
@@ -59,36 +52,44 @@ def get_args():
         default=None,
     )
 
-    # tblastn args
-    blast_opts = main_parser.add_argument_group("tblastn arguments")
-    blast_opts.add_argument(
+    # search args
+    search_opts = main_parser.add_argument_group("Search arguments")
+    search_opts.add_argument(
         "-e",
         "--evalue",
         dest="e_value",
-        help="e-value threshold for identifying homologs using tblastn",
+        help="e-value threshold for identifying homologs using mmseqs2 (default: 1e-5)",
         type=float,
-        required=True,
+        required=False,
         default=1e-5,
     )
 
     # main parser args
     main_parser.add_argument(
-        "-v", "--version", action="version", version="%(prog)s " + __version__
+        "-v", "--version", action="version", version=f"%(prog)s {__version__}"
     )
 
     args = main_parser.parse_args()
-    main_parser.set_defaults(func=run_tblastn)
+    main_parser.set_defaults(func=run_pseudomancer_pipeline)
 
     return args
 
 
 def main():
-    args = get_args(sys.argv[1:])
+    args = get_args()
 
-    check_blast_version()
+    check_dependencies()
 
     if not os.path.exists(args.output_dir):
-        os.mkdir(args.output_dir)
+        os.makedirs(args.output_dir, exist_ok=True)
+    
+    # Run the pipeline
+    run_pseudomancer_pipeline(
+        genus=args.genus,
+        genome_file=args.genome_file,
+        output_dir=args.output_dir,
+        evalue=args.e_value
+    )
 
 
 if __name__ == "__main__":
