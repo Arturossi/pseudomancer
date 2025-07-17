@@ -11,8 +11,8 @@ import zipfile
 
 
 def check_dependencies():
-    """Check if required dependencies (mmseqs2, datasets) are available."""
-    dependencies = ["mmseqs", "datasets"]
+    """Check if required dependencies (mmseqs2, datasets, getorf) are available."""
+    dependencies = ["mmseqs", "datasets", "getorf"]
     missing = []
     
     for dep in dependencies:
@@ -25,6 +25,7 @@ def check_dependencies():
             "Please install the following tools:\n"
             "- mmseqs2: https://github.com/soedinglab/MMseqs2\n"
             "- datasets: https://www.ncbi.nlm.nih.gov/datasets/docs/v2/command-line-tools/download-and-install/\n"
+            "- getorf (EMBOSS): conda install -c bioconda emboss\n"
         )
         sys.exit(1)
 
@@ -132,6 +133,53 @@ def cluster_proteins_mmseqs2(protein_file: str, output_dir: str, identity: float
     return rep_seq_file
 
 
+def identify_orfs(genome_file: str, output_dir: str, minsize: int = 90, table: int = 11) -> str:
+    """
+    Identify open reading frames (ORFs) in the genome using getorf.
+    
+    Parameters
+    ----------
+    genome_file : str
+        Path to genome FASTA file
+    output_dir : str
+        Directory for output files
+    minsize : int
+        Minimum ORF size in codons (default: 90)
+    table : int
+        Genetic code table (default: 11 for bacteria)
+        
+    Returns
+    -------
+    str
+        Path to ORF sequences file
+    """
+    base_name = os.path.splitext(os.path.basename(genome_file))[0]
+    orf_file = os.path.join(output_dir, f"{base_name}_orfs.fasta")
+    
+    print(f"Running getorf ORF identification on {genome_file}...")
+    
+    cmd = [
+        "getorf",
+        "-sequence", genome_file,
+        "-outseq", orf_file,
+        "-find", "3",
+        "-minsize", str(minsize),
+        "-table", str(table),
+        "-reverse", "yes",
+        "-flanking", "0",
+        "-methionine"
+    ]
+    
+    try:
+        subprocess.run(cmd, check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as e:
+        sys.stderr.write(f"Failed to identify ORFs: {e.stderr}\n")
+        sys.exit(1)
+    
+    print(f"ORF sequences saved to {orf_file}")
+    return orf_file
+
+
 def run_mmseqs2_search(protein_db: str, genome_file: str, output_dir: str, evalue: float = 1e-5) -> str:
     """
     Run mmseqs2 search (tblastn-like) against genome.
@@ -207,6 +255,9 @@ def run_pseudomancer_pipeline(genus: str, genome_file: str, output_dir: str, eva
         E-value threshold for searches
     """
     check_dependencies()
+    
+    # ORF identification in reference genome
+    orf_file = identify_orfs(genome_file, output_dir)
     
     # Download and merge proteins
     protein_file = download_ncbi_assemblies(genus, output_dir)

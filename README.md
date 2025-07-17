@@ -27,6 +27,14 @@ Before using pseudomancer, you need to install these external dependencies:
    # Move to a directory in your PATH
    ```
 
+3. **getorf (EMBOSS)** - For identifying open reading frames in genomes
+   ```bash
+   # Install via conda (recommended)
+   conda install -c bioconda emboss
+   
+   # Or see: http://emboss.sourceforge.net/
+   ```
+
 ### Python Package
 
 ```bash
@@ -52,11 +60,12 @@ python -m pseudomancer --genus Mycobacterium --genome target_genome.fasta --out_
 
 ## How it works
 
-1. Downloads all complete, annotated genomes for the specified genus from NCBI RefSeq
-2. Extracts and merges protein sequences from all assemblies
-3. Clusters proteins at 99% identity using mmseqs2 to create a non-redundant dataset
-4. Searches the clustered proteins against your target genome using mmseqs2 (tblastn-like search)
-5. Outputs results in tabular format with alignment statistics
+1. Identifies all open reading frames (ORFs) in the target genome using getorf
+2. Downloads all complete, annotated genomes for the specified genus from NCBI RefSeq
+3. Extracts and merges protein sequences from all assemblies
+4. Clusters proteins at 99% identity using mmseqs2 to create a non-redundant dataset
+5. Searches the clustered proteins against your target genome using mmseqs2 (tblastn-like search)
+6. Outputs results in tabular format with alignment statistics
 
 ## Note
 
