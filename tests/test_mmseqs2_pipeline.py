@@ -5,11 +5,9 @@ from unittest.mock import patch, MagicMock
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from pseudomancer.pipeline import (
-    check_dependencies,
-    cluster_proteins_mmseqs2,
-    run_mmseqs2_search,
-)
+from pseudomancer.dependencies import check_dependencies
+from pseudomancer.clustering import cluster_proteins_mmseqs2
+from pseudomancer.search import run_mmseqs2_search
 
 
 class TestDependencies:
@@ -109,7 +107,7 @@ class TestFileHandling:
     
     def test_output_directories_created(self, temp_dir):
         """Test that output directories are created properly."""
-        from pseudomancer.pipeline import run_mmseqs2_search
+        from pseudomancer.search import run_mmseqs2_search
         
         with patch('subprocess.run'):
             # Create mock files

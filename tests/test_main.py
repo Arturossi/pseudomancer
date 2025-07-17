@@ -90,7 +90,8 @@ class TestMainFunction:
     @patch('pseudomancer.__main__.run_pseudomancer_pipeline')
     @patch('pseudomancer.__main__.check_dependencies')
     @patch('os.path.exists')
-    def test_main_existing_output_dir(self, mock_exists, mock_check_deps, mock_pipeline):
+    @patch('os.makedirs')
+    def test_main_existing_output_dir(self, mock_makedirs, mock_exists, mock_check_deps, mock_pipeline):
         """Test main function when output directory already exists."""
         mock_exists.return_value = True
         mock_pipeline.return_value = "/path/to/results.txt"
@@ -103,8 +104,7 @@ class TestMainFunction:
         ]
         
         with patch('sys.argv', test_args):
-            with patch('os.makedirs') as mock_makedirs:
-                main()
+            main()
         
-        # Check that makedirs was still called (with exist_ok=True)
-        mock_makedirs.assert_called_once_with('/path/to/output', exist_ok=True)
+        # Check that makedirs was NOT called since directory exists
+        mock_makedirs.assert_not_called()
