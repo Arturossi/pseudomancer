@@ -12,7 +12,7 @@ from typing import Optional, Tuple
 def parse_getorf_header(header: str) -> Optional[dict]:
     """
     Parse getorf FASTA header to extract coordinates.
-    
+
     Example headers:
     Forward: >NC_002677.1_1 [93 - 272] Mycobacterium leprae TN, complete sequence
     Reverse: >NC_002677.1_53466 [1611 - 1420] (REVERSE SENSE) Mycobacterium leprae TN, complete sequence
@@ -102,7 +102,7 @@ def convert_fasta_to_gff(fasta_file: str, gff_file: str) -> None:
 def identify_orfs(genome_file: str, output_dir: str, minsize: int = 90, table: int = 11) -> Tuple[str, str]:
     """
     Identify open reading frames (ORFs) in the genome using getorf.
-    
+
     Parameters
     ----------
     genome_file : str
@@ -113,7 +113,7 @@ def identify_orfs(genome_file: str, output_dir: str, minsize: int = 90, table: i
         Minimum ORF size in codons (default: 90)
     table : int
         Genetic code table (default: 11 for bacteria)
-        
+
     Returns
     -------
     Tuple[str, str]
@@ -132,16 +132,13 @@ def identify_orfs(genome_file: str, output_dir: str, minsize: int = 90, table: i
         "-outseq",
         orf_file,
         "-find",
-        "3",
+        "2",
         "-minsize",
         str(minsize),
         "-table",
         str(table),
-        "-reverse",
-        "yes",
         "-flanking",
         "0",
-        "-methionine",
     ]
 
     try:
