@@ -317,13 +317,19 @@ def export_candidates_to_gff(frameshift_df: pd.DataFrame, output_file: str, geno
         ]
         
         # Create GFF line
+        # Calculate score, handling edge case where evalue is 0
+        if row['best_evalue'] <= 0:
+            score = "999.0"  # Use maximum score for perfect matches
+        else:
+            score = str(round(-math.log10(row['best_evalue']), 1))
+        
         gff_line = '\t'.join([
             row['target'],          # seqid
             'MMseqs2',             # source
             'pseudogene',          # type
             str(int(row['target_start'])),  # start
             str(int(row['target_end'])),    # end
-            str(round(-math.log10(row['best_evalue']), 1)),  # score
+            score,                 # score
             '+' if row['strand'] == 'forward' else '-',  # strand
             '.',                   # phase
             ';'.join(attributes)   # attributes
