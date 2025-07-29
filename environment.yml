@@ -14,6 +14,7 @@ dependencies:
   - pandas>=1.3.0
   - biopython>=1.79
   - pytest>=6.0.0
+  - ruff
   - pip
   - pip:
     - -e .
