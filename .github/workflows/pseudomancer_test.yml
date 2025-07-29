@@ -29,6 +29,7 @@ jobs:
         environment-file: environment.yml
         python-version: ${{ matrix.python-version }}
     - name: Test with pytest
+      shell: bash -l {0}
       run: |
         conda activate pseudomancer_env
         pytest --datafolder="${{ github.workspace }}/test_data/"
