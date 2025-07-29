@@ -4,53 +4,25 @@ A command line tool for reconstructing pseudogenes in prokaryotic genomes.
 
 ## Installation
 
-### Prerequisites
-
-Before using pseudomancer, you need to install these external dependencies:
-
-1. **mmseqs2** - For protein clustering and homology searches
-
-   ```bash
-   # Install via conda (recommended)
-   conda install -c conda-forge -c bioconda mmseqs2
-
-   # Or see: https://github.com/soedinglab/MMseqs2
-   ```
-
-2. **NCBI datasets** - For downloading reference genomes
-
-   ```bash
-   # Download the appropriate binary for your system
-   # See: https://www.ncbi.nlm.nih.gov/datasets/docs/v2/command-line-tools/download-and-install/
-
-   # Example for Linux:
-   wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets
-   chmod +x datasets
-   # Move to a directory in your PATH
-   ```
-
-3. **getorf (EMBOSS)** - For identifying open reading frames in genomes
-
-   ```bash
-   # Install via conda (recommended)
-   conda install -c bioconda emboss
-
-   # Or see: http://emboss.sourceforge.net/
-   ```
-
-### Python Package
-
 ```bash
-git clone <this-repo>
+# Clone the repository
+git clone https://github.com/Floto-Lab/pseudomancer.git
 cd pseudomancer
-python -m venv env
-source env/bin/activate  # On Windows: env\Scripts\activate
-pip install -r requirements.txt
+
+# Create conda environment with all dependencies
+mamba env create -f environment.yml
+mamba activate pseudomancer_env
 ```
+
+**Requirements**: [Mamba](https://mamba.readthedocs.io/) or [Conda](https://docs.conda.io/) package manager
 
 ## Usage
 
 ```bash
+# Activate environment (if not already active)
+mamba activate pseudomancer_env
+
+# Run pipeline
 python -m pseudomancer --genus Mycobacterium --genome target_genome.fasta --out_dir results/
 ```
 
