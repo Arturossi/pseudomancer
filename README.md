@@ -32,6 +32,7 @@ python -m pseudomancer --taxon Mycobacterium --genome target_genome.fasta --out_
 - `--genome`: Target genome FASTA file to search for pseudogenes
 - `--out_dir`: Output directory for results
 - `--evalue`: E-value threshold (default: 1e-5)
+- `--cluster`: Enable protein clustering at 99% identity (default: False)
 
 ## How it works
 
