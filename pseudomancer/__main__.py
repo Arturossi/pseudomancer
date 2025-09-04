@@ -35,8 +35,9 @@ def get_args():
         dest="taxon",
         help=(
             "Taxon name for downloading reference protein sequences from NCBI RefSeq "
-            + "(e.g., 'Mycobacterium' or 'Mycobacterium tuberculosis'). Proteins will be downloaded, optionally clustered at 99%% identity, "
-            + "and used as queries for homolog searches."
+            + "(e.g., 'Mycobacterium' or 'Mycobacterium tuberculosis'). Proteins will be "
+            + "downloaded, optionally clustered at 99%% identity, and used as queries for "
+            + "homolog searches."
         ),
         type=str,
         required=True,
