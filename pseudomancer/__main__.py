@@ -95,7 +95,8 @@ def main():
         taxon=args.taxon,
         genome_file=args.genome_file,
         output_dir=args.output_dir,
-        evalue=args.e_value
+        evalue=args.e_value,
+        cluster=args.cluster
     )
 
 
