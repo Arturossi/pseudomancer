@@ -41,7 +41,7 @@ class TestArgumentParsing:
         """Test that default e-value is set correctly."""
         test_args = [
             '--genome', '/path/to/genome.fasta',
-            '--genus', 'Mycobacterium',
+            '--taxon', 'Mycobacterium',
             '--out_dir', '/path/to/output'
         ]
         

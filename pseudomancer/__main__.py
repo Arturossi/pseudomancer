@@ -31,11 +31,11 @@ def get_args():
         default=None,
     )
     io_opts.add_argument(
-        "--genus",
-        dest="genus",
+        "--taxon",
+        dest="taxon",
         help=(
-            "Genus name for downloading reference protein sequences from NCBI RefSeq "
-            + "(e.g., 'Mycobacterium'). Proteins will be downloaded, clustered at 99%% identity, "
+            "Taxon name for downloading reference protein sequences from NCBI RefSeq "
+            + "(e.g., 'Mycobacterium' or 'Mycobacterium tuberculosis'). Proteins will be downloaded, clustered at 99%% identity, "
             + "and used as queries for homolog searches."
         ),
         type=str,
@@ -85,7 +85,7 @@ def main():
     
     # Run the pipeline
     run_pseudomancer_pipeline(
-        genus=args.genus,
+        taxon=args.taxon,
         genome_file=args.genome_file,
         output_dir=args.output_dir,
         evalue=args.e_value
