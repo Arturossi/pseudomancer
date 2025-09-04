@@ -16,7 +16,7 @@ class TestArgumentParsing:
         """Test parsing valid arguments."""
         test_args = [
             '--genome', '/path/to/genome.fasta',
-            '--genus', 'Mycobacterium',
+            '--taxon', 'Mycobacterium',
             '--out_dir', '/path/to/output',
             '--evalue', '1e-6'
         ]
@@ -65,7 +65,7 @@ class TestMainFunction:
         test_args = [
             'pseudomancer',
             '--genome', '/path/to/genome.fasta',
-            '--genus', 'Mycobacterium',
+            '--taxon', 'Mycobacterium',
             '--out_dir', '/path/to/output',
             '--evalue', '1e-6'
         ]
@@ -81,7 +81,7 @@ class TestMainFunction:
         
         # Check that pipeline was called with correct arguments
         mock_pipeline.assert_called_once_with(
-            genus='Mycobacterium',
+            taxon='Mycobacterium',
             genome_file='/path/to/genome.fasta',
             output_dir='/path/to/output',
             evalue=1e-6
@@ -99,7 +99,7 @@ class TestMainFunction:
         test_args = [
             'pseudomancer',
             '--genome', '/path/to/genome.fasta',
-            '--genus', 'Mycobacterium',
+            '--taxon', 'Mycobacterium',
             '--out_dir', '/path/to/output'
         ]
         
