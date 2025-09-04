@@ -23,12 +23,12 @@ mamba activate pseudomancer_env
 mamba activate pseudomancer_env
 
 # Run pipeline
-python -m pseudomancer --genus Mycobacterium --genome target_genome.fasta --out_dir results/
+python -m pseudomancer --taxon Mycobacterium --genome target_genome.fasta --out_dir results/
 ```
 
 ### Parameters
 
-- `--genus`: Genus name for downloading reference proteins from NCBI RefSeq
+- `--taxon`: Taxon name for downloading reference proteins from NCBI RefSeq (e.g., 'Mycobacterium' or 'Mycobacterium tuberculosis')
 - `--genome`: Target genome FASTA file to search for pseudogenes
 - `--out_dir`: Output directory for results
 - `--evalue`: E-value threshold (default: 1e-5)
