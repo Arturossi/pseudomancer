@@ -18,7 +18,8 @@ class TestArgumentParsing:
             '--genome', '/path/to/genome.fasta',
             '--taxon', 'Mycobacterium',
             '--out_dir', '/path/to/output',
-            '--evalue', '1e-6'
+            '--evalue', '1e-6',
+            '--cluster'
         ]
         
         with patch('sys.argv', ['pseudomancer'] + test_args):
@@ -28,6 +29,7 @@ class TestArgumentParsing:
             assert args.taxon == 'Mycobacterium'
             assert args.output_dir == '/path/to/output'
             assert args.e_value == 1e-6
+            assert args.cluster is True
     
     def test_get_args_missing_required(self):
         """Test parsing with missing required arguments."""
@@ -37,7 +39,7 @@ class TestArgumentParsing:
             with pytest.raises(SystemExit):
                 get_args()
     
-    def test_get_args_default_evalue(self):
+    def test_get_args_defaults(self):
         """Test that default e-value is set correctly."""
         test_args = [
             '--genome', '/path/to/genome.fasta',
@@ -48,6 +50,7 @@ class TestArgumentParsing:
         with patch('sys.argv', ['pseudomancer'] + test_args):
             args = get_args()
             assert args.e_value == 1e-5
+            assert args.cluster is False
 
 
 class TestMainFunction:
@@ -84,7 +87,8 @@ class TestMainFunction:
             taxon='Mycobacterium',
             genome_file='/path/to/genome.fasta',
             output_dir='/path/to/output',
-            evalue=1e-6
+            evalue=1e-6,
+            cluster=False
         )
     
     @patch('pseudomancer.__main__.run_pseudomancer_pipeline')

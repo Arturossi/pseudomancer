@@ -38,6 +38,7 @@ python -m pseudomancer --taxon Mycobacterium --genome target_genome.fasta --out_
 1. Identifies all open reading frames (ORFs) in the target genome using getorf
 2. Downloads all complete, annotated genomes for the specified genus from NCBI RefSeq
 3. Extracts and merges protein sequences from all assemblies
-4. Clusters proteins at 99% identity using mmseqs2 to create a non-redundant dataset
+4. Optionally, clusters proteins at 99% identity using mmseqs2 to create a non-redundant dataset
 5. Searches the clustered proteins against your target genome using mmseqs2 (tblastn-like search)
 6. Outputs results in tabular format with alignment statistics
+s in tabular format with alignment statistics
