@@ -25,7 +25,7 @@ class TestArgumentParsing:
             args = get_args()
             
             assert args.genome_file == '/path/to/genome.fasta'
-            assert args.genus == 'Mycobacterium'
+            assert args.taxon == 'Mycobacterium'
             assert args.output_dir == '/path/to/output'
             assert args.e_value == 1e-6
     
