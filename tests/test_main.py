@@ -83,7 +83,7 @@ class TestMainFunction:
         mock_makedirs.assert_called_once_with('/path/to/output', exist_ok=True)
         
         # Check that pipeline was called with correct arguments
-                mock_pipeline.assert_called_once_with(
+        mock_pipeline.assert_called_once_with(
             taxon='Mycobacterium',
             genome_file='/path/to/genome.fasta',
             output_dir='/path/to/output',
