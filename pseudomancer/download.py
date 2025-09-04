@@ -8,14 +8,14 @@ import os
 import zipfile
 
 
-def download_ncbi_assemblies(genus: str, output_dir: str) -> str:
+def download_ncbi_assemblies(taxon: str, output_dir: str) -> str:
     """
-    Download NCBI RefSeq assemblies for a given genus.
+    Download NCBI RefSeq assemblies for a given taxon.
     
     Parameters
     ----------
-    genus : str
-        Genus name (e.g., 'Mycobacterium')
+    taxon : str
+        Taxon name (e.g., 'Mycobacterium')
     output_dir : str
         Directory to store downloaded assemblies
         
@@ -24,17 +24,18 @@ def download_ncbi_assemblies(genus: str, output_dir: str) -> str:
     str
         Path to the merged protein FASTA file
     """
-    assemblies_dir = os.path.join(output_dir, f"{genus.lower()}_assemblies")
+    taxon_name = taxon.replace(" ", "_")
+    assemblies_dir = os.path.join(output_dir, f"{taxon_name.lower()}_assemblies")
     os.makedirs(assemblies_dir, exist_ok=True)
     
     # Use datasets to download assemblies
-    print(f"Downloading {genus} assemblies from NCBI RefSeq...")
+    print(f"Downloading {taxon} assemblies from NCBI RefSeq...")
     cmd = [
         "datasets",
         "download",
         "genome",
         "taxon",
-        genus,
+        taxon,
         "--annotated",
         "--reference",
         "--assembly-level",
@@ -42,7 +43,7 @@ def download_ncbi_assemblies(genus: str, output_dir: str) -> str:
         "--include",
         "genome,protein,gff3,gtf,seq-report",
         "--filename",
-        os.path.join(assemblies_dir, f"{genus.lower()}_dataset.zip"),
+        os.path.join(assemblies_dir, f"{taxon_name.lower()}_dataset.zip"),
     ]
     
     try:
@@ -53,7 +54,7 @@ def download_ncbi_assemblies(genus: str, output_dir: str) -> str:
     
     # Extract and merge protein files
     protein_files = []
-    zip_path = os.path.join(assemblies_dir, f"{genus.lower()}_dataset.zip")
+    zip_path = os.path.join(assemblies_dir, f"{taxon_name.lower()}_dataset.zip")
     
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         zip_ref.extractall(assemblies_dir)
@@ -65,7 +66,7 @@ def download_ncbi_assemblies(genus: str, output_dir: str) -> str:
                 protein_files.append(os.path.join(root, file))
     
     # Merge protein files
-    merged_proteins = os.path.join(output_dir, f"{genus.lower()}_proteins.faa")
+    merged_proteins = os.path.join(output_dir, f"{taxon_name.lower()}_proteins.faa")
     with open(merged_proteins, "w") as outfile:
         for protein_file in protein_files:
             with open(protein_file, "r") as infile:

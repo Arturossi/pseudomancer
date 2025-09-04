@@ -11,14 +11,14 @@ from .candidates import process_mmseqs2_results
 from .overlap import overlap_with_getorf
 
 
-def run_pseudomancer_pipeline(genus: str, genome_file: str, output_dir: str, evalue: float = 1e-5):
+def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, evalue: float = 1e-5):
     """
     Run the complete pseudomancer pipeline with mmseqs2.
     
     Parameters
     ----------
-    genus : str
-        Genus name for protein download
+    taxon : str
+        Taxon name for protein download
     genome_file : str
         Path to target genome file
     output_dir : str
@@ -32,7 +32,7 @@ def run_pseudomancer_pipeline(genus: str, genome_file: str, output_dir: str, eva
     orf_file, orf_gff_file = identify_orfs(genome_file, output_dir)
 
     # Download and merge proteins
-    protein_file = download_ncbi_assemblies(genus, output_dir)
+    protein_file = download_ncbi_assemblies(taxon, output_dir)
 
     # Cluster proteins
     clustered_proteins = cluster_proteins_mmseqs2(protein_file, output_dir)
