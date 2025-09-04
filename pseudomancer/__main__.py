@@ -63,6 +63,13 @@ def get_args():
         required=False,
         default=1e-5,
     )
+    search_opts.add_argument(
+        "--cluster",
+        dest="cluster",
+        action="store_true",
+        help="Enable protein clustering (default: False)",
+        default=False,
+    )
 
     # main parser args
     main_parser.add_argument(

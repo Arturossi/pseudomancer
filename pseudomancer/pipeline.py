@@ -11,7 +11,7 @@ from .candidates import process_mmseqs2_results
 from .overlap import overlap_with_getorf
 
 
-def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, evalue: float = 1e-5):
+def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, evalue: float = 1e-5, cluster: bool = False):
     """
     Run the complete pseudomancer pipeline with mmseqs2.
     
@@ -25,6 +25,8 @@ def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, eva
         Output directory
     evalue : float
         E-value threshold for searches
+    cluster : bool
+        Whether to cluster proteins (default: False)
     """
     check_dependencies()
 
@@ -34,11 +36,12 @@ def run_pseudomancer_pipeline(taxon: str, genome_file: str, output_dir: str, eva
     # Download and merge proteins
     protein_file = download_ncbi_assemblies(taxon, output_dir)
 
-    # Cluster proteins
-    clustered_proteins = cluster_proteins_mmseqs2(protein_file, output_dir)
+    # Cluster proteins if requested
+    if cluster:
+        protein_file = cluster_proteins_mmseqs2(protein_file, output_dir)
 
     # Run search
-    results_file = run_mmseqs2_search(clustered_proteins, genome_file, output_dir, evalue)
+    results_file = run_mmseqs2_search(protein_file, genome_file, output_dir, evalue)
 
     # Process mmseqs2 results to generate pseudogene candidates GFF
     pseudogene_gff = process_mmseqs2_results(results_file, output_dir, genome_file)
