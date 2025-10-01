@@ -25,14 +25,10 @@ jobs:
           pip install sphinx furo myst-parser sphinx-autodoc-typehints
 
       - name: Build Sphinx docs
-        working-directory: docs
-        run: |
-          make html
+        run: sphinx-build -b html docs/source docs/_build/html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build/html
-          force_orphan: true
-          exclude_assets: ''
+          publish_dir: _site
