@@ -25,7 +25,6 @@ jobs:
           pip install sphinx furo myst-parser sphinx-autodoc-typehints
 
       - name: Build Sphinx docs
-        working-directory: docs
         run: sphinx-build -b html docs _site
 
       - name: Deploy to GitHub Pages
