@@ -70,6 +70,7 @@ pseudomancer.search module
 
 pseudomancer.features module
 ----------------------------
+
 .. automodule:: pseudomancer.features
    :members:
    :show-inheritance:
@@ -77,6 +78,7 @@ pseudomancer.features module
 
 pseudomancer.motifdb module
 ---------------------------
+
 .. automodule:: pseudomancer.motifdb
    :members:
    :show-inheritance:

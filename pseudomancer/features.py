@@ -4,6 +4,7 @@ from Bio.motifs.matrix import PositionSpecificScoringMatrix
 from pathlib import Path
 from typing import Dict, List, Optional, Union, Mapping, Tuple
 
+
 # Caches
 _MOTIF_DB_CACHE: Dict[Tuple[str, str], Dict[str, motifs.Motif]] = {}
 _PWM_CACHE: Dict[Tuple[Tuple[Tuple[float, ...], ...], float], PositionSpecificScoringMatrix] = {}
@@ -313,7 +314,7 @@ def _cache_key_for_db(db_path: Union[str, Path], fmt: str) -> Optional[Tuple[str
         path = path.resolve()
     except OSError:
         path = path.resolve(strict=False)
-        
+
     return (str(path), fmt)
 
 
