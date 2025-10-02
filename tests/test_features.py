@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
 
+import pytest
+
 import pseudomancer.features as features_mod
 import pseudomancer.motifdb as motifdb_mod
 
-from pseudomancer.features import find_shine_dalgarno, find_promoter
+from pseudomancer.features import find_shine_dalgarno, find_promoter, find_start_codons
 from pseudomancer.motifdb import load_prodoric_json
 
 
@@ -21,6 +23,45 @@ def _make_prodoric_entry(name: str, pattern: str) -> dict:
         "name": name,
         "pwm": counts,
     }
+
+
+def test_find_start_codons_forward_all_and_best() -> None:
+    """Detect canonical and alternative start codons on the forward strand."""
+
+    seq = "AAAATGAAAGTGTTG"
+
+    best = find_start_codons(seq, 0, len(seq), strand_name="forward")
+    assert best is not None
+    assert best["codon"] == "ATG"
+    assert best["absolute_pos"] == seq.index("ATG")
+    assert best["distance"] == best["absolute_pos"]
+
+    all_hits = find_start_codons(seq, 0, len(seq), strand_name="forward", return_all=True)
+    assert isinstance(all_hits, list)
+    assert [hit["codon"] for hit in all_hits] == ["ATG", "GTG", "TTG"]
+
+
+def test_find_start_codons_reverse_detection() -> None:
+    """Detect start codons on the reverse strand (forward sequence contains complements)."""
+
+    seq = "CATCACCAA"  # complements of ATG, GTG, TTG on the reverse strand
+
+    best = find_start_codons(seq, 0, len(seq), strand_name="reverse")
+    assert best is not None
+    assert best["codon"] == "ATG"
+    assert best["absolute_pos"] == seq.index("CAT")
+    assert best["distance"] == len(seq) - (best["absolute_pos"] + 3)
+
+    all_hits = find_start_codons(seq, 0, len(seq), strand_name="reverse", return_all=True)
+    assert [hit["codon"] for hit in all_hits] == ["ATG", "GTG", "TTG"]
+
+
+def test_find_start_codons_invalid_region() -> None:
+    """Invalid window coordinates should raise an informative error."""
+
+    seq = "ATG"
+    with pytest.raises(ValueError):
+        find_start_codons(seq, 5, 2, strand_name="forward")
 
 
 def test_find_shine_dalgarno_forward_exact() -> None:

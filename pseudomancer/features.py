@@ -77,7 +77,7 @@ def search_motifs(
     strand_name : str
         "forward" or "reverse".
     mode : str
-        "exact" or "pwm".
+        "exact" or "pwm". Exact matches or PWM scoring.
     motifs_list : list of str
         Motifs to search or seed for PWM.
     threshold : float, optional
@@ -182,7 +182,7 @@ def find_shine_dalgarno(
     window : int
         Search window size upstream of start codon.
     mode : str
-        "exact" or "pwm".
+        "exact" or "pwm". Exact matches or PWM scoring.
     sd_sequences : list of str
         Known Shine-Dalgarno motifs.
     threshold : float, optional
@@ -452,3 +452,79 @@ def find_promoter(
     if return_all:
         return hits
     return max(hits, key=lambda h: h["score"])
+
+
+def find_start_codons(
+        sequence: str,
+        region_start: int,
+        region_end: int,
+        strand_name: str,
+        codons: Optional[List[str]] = None,
+        mismatches: int = 0,
+        return_all: bool = False,
+    ) -> Optional[Union[Dict, List[Dict]]]:
+    """Locate putative start codons within a genomic window.
+
+    Parameters
+    ----------
+    sequence : str
+        Full genomic DNA sequence.
+    region_start : int
+        Start coordinate (inclusive) of the window to inspect.
+    region_end : int
+        End coordinate (exclusive) of the window to inspect.
+    strand_name : str
+        "forward" or "reverse".
+    codons : list of str, optional
+        Start codon triplets to consider. Defaults to ``["ATG", "GTG", "TTG"]``.
+        Earlier entries in the list are treated as higher priority when
+        selecting a single best hit.
+    mismatches : int, optional
+        Maximum number of mismatches permitted when matching codons
+        (defaults to 0 for exact matches).
+    return_all : bool, optional
+        If ``True`` return a list of all detected codons. Otherwise, return the
+        highest priority hit.
+
+    Returns
+    -------
+    dict or list of dict or None
+        A single hit (default), a list of hits, or ``None`` if no codons are
+        detected. Each hit dictionary contains ``codon``, ``absolute_pos``,
+        ``relative_pos`` (offset within the inspected window), ``distance``
+        (offset to the window boundary: ``region_start`` for the forward strand
+        or ``region_end`` for the reverse strand), and ``strand_name``.
+    """
+
+    if region_start < 0 or region_end > len(sequence) or region_start >= region_end:
+        raise ValueError("Invalid region boundaries provided to find_start_codons.")
+
+    codon_list = tuple(c.upper() for c in (codons or ["ATG", "GTG", "TTG"]))
+    
+    hits = search_motifs(
+        sequence,
+        region_start,
+        region_end,
+        strand_name,
+        mode="exact",
+        motifs_list=list(codon_list),
+        mismatches=mismatches,
+    )
+
+    if not hits:
+        return None
+
+    preference = {codon: idx for idx, codon in enumerate(codon_list)}
+
+    for hit in hits:
+        hit["codon"] = hit.pop("motif")
+        if strand_name == "forward":
+            hit["distance"] = hit["absolute_pos"] - region_start
+        else:
+            hit["distance"] = region_end - (hit["absolute_pos"] + len(hit["codon"]))
+
+    hits.sort(key=lambda h: (preference.get(h["codon"], len(codon_list)), h["relative_pos"]))
+
+    if return_all:
+        return hits
+    return hits[0]
