@@ -1,3 +1,7 @@
+"""
+Motif database access and management for Pseudomancer.
+"""
+
 from __future__ import annotations
 
 import json
@@ -91,7 +95,7 @@ def load_prodoric_json(data: Union[dict, list, str, Path]) -> Dict[str, motifs.M
         raise ValueError("Expected dict, list of dicts, or path to JSON file.")
 
     result: Dict[str, motifs.Motif] = {}
-    
+
     for entry in entries:
         pwm = entry.get("pwm")
         if pwm is None:

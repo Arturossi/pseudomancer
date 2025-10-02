@@ -1,3 +1,8 @@
+"""
+Feature extraction functions for genomic sequences, including motif searches
+and promoter identification using PWMs from motif databases.
+"""
+
 from Bio import motifs
 from Bio.Seq import Seq
 from Bio.motifs.matrix import PositionSpecificScoringMatrix
