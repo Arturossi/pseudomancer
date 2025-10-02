@@ -68,6 +68,20 @@ pseudomancer.search module
    :show-inheritance:
    :undoc-members:
 
+pseudomancer.features module
+----------------------------
+.. automodule:: pseudomancer.features
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+pseudomancer.motifdb module
+---------------------------
+.. automodule:: pseudomancer.motifdb
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 
