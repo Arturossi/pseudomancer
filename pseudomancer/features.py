@@ -351,8 +351,9 @@ def find_promoter(
         Path to motif database file, a Prodoric2 JSON dict, or a preloaded motif mapping.
     fmt : str, default "json"
         File format. Options:
-        - "json": Prodoric2 JSON (preferred and default).
-        - "meme", "transfac", "jaspar": other Biopython-supported formats
+
+        * "json": Prodoric2 JSON (preferred and default).
+        * "meme", "transfac", "jaspar": other Biopython-supported formats
           (discouraged, kept for legacy use).
     window : int, default 120
         Search window size upstream of start codon.

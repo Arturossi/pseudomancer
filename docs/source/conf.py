@@ -2,6 +2,8 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath('../..'))
 
+import furo  # ensure theme is available during builds
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -25,6 +27,11 @@ extensions = [
     "sphinx_autodoc_typehints",
     "myst_parser",
 ]
+try:  # optional extension; skip if missing
+    import sphinx_autodoc_typehints  # noqa: F401
+except ImportError:  # pragma: no cover - docs build fallback
+    extensions.remove("sphinx_autodoc_typehints")
+
 
 templates_path = ['_templates']
 exclude_patterns = []
